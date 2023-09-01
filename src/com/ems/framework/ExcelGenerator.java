@@ -9,13 +9,19 @@ import com.ems.share.EducationDataList;
 import com.ems.share.EmployeeData;
 
 import java.io.Closeable;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Response;
 
 public class ExcelGenerator {
 
@@ -121,13 +127,24 @@ public class ExcelGenerator {
         }
     }
 
-    public void generateExcelFile(HttpServletResponse response) throws IOException {
+    public Response generateExcelFile() throws IOException {
         writeHeader();
         write();
-        OutputStream outputStream = response.getOutputStream();
-        workbook.write(outputStream);
-        ((Closeable) workbook).close();
-        outputStream.close();
+        File excelFile = File.createTempFile("employee", ".xlsx");
+        try (FileOutputStream outputStream = new FileOutputStream(excelFile)) {
+            workbook.write(outputStream);
+        }        
+    
+        Response.ResponseBuilder responses = Response.ok(excelFile);        
+        responses.header("Content-Disposition", "attachment; filename=employee.xlsx");
+        return responses.build();
+        
+        
+        
+//        OutputStream outputStream = response.getOutputStream();
+//        workbook.write(outputStream);
+//        ((Closeable) workbook).close();
+//        outputStream.close();
     }
 
 }

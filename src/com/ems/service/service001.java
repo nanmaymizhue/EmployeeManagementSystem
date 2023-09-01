@@ -42,8 +42,6 @@ import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 
 
-
-
 @Path("/service001")
 public class service001 {
 	@Context
@@ -97,17 +95,17 @@ public class service001 {
         }
     }
     
-
-	@POST
-	@Path("updateEmployee")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Result update(EmployeeData data) throws IOException, SQLException {
-		Result res = new Result();
-		res = service001Mgr.updateEmployee(data, getUser());
-		return res;
-	}
-	
+//
+//	@POST
+//	@Path("updateEmployee")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	public Result update(EmployeeData data) throws IOException, SQLException {
+//		Result res = new Result();
+//		res = service001Mgr.updateEmployee(data, getUser());
+//		return res;
+//	}
+//	
 	
 	
 	@GET
@@ -121,6 +119,7 @@ public class service001 {
 		}
 		return res;
 	}
+	
 
 	@POST
 	@Path("getEmployeeList")
@@ -130,6 +129,7 @@ public class service001 {
 		res = service001Mgr.getEmployeeList(pdata, getUser());
 		return res;
 	}
+	
 	
 
 	@DELETE
@@ -181,24 +181,23 @@ public class service001 {
     @GET
     @Path("export")
     @Produces("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-    public void exportToExcelFile(@Context HttpHeaders headers) throws IOException {
+    public Response exportToExcelFile(@Context HttpHeaders headers) throws IOException {
             
-        	response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-	        
-        	DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-	        String currentDateTime = dateFormatter.format(new Date());
-
-	        String headerKey = "Content-Disposition";
-	        String headerValue = "attachment; filename=employee_" + currentDateTime + ".xlsx";
-
-	        response.setHeader(headerKey, headerValue);
+//        	response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+//	        
+//        	DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+//	        String currentDateTime = dateFormatter.format(new Date());
+//
+//	        String headerKey = "Content-Disposition";
+//	        String headerValue = "attachment; filename=employee_" + currentDateTime + ".xlsx";
+//
+//	        response.setHeader(headerKey, headerValue);
 
 	        List<EmployeeData> employeeData = service001Mgr.getEmployeeData(getUser());
 
 	        ExcelGenerator generator = new ExcelGenerator(employeeData);
-	        generator.generateExcelFile(response);
-    }
-		    
+	        return generator.generateExcelFile();
+    }	    
 	        
 
 
@@ -211,7 +210,10 @@ public class service001 {
         Result res = ExcelUtils.parseExcelFile(fileInputStream, request, context);
         return res;
     }
+    
 }
+
+
 	    
 //  @POST
 //  @Path("/import")

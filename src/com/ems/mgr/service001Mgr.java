@@ -112,6 +112,7 @@ public class service001Mgr {
 		}
 		return res;
 	}
+	
 
 	public static String uploadProfileImage(InputStream imageInputStream, String fileName, MrBean user) {
 		

@@ -328,8 +328,7 @@ public class service001Dao {
 		        educationData.setType(educationRes.getString("type"));
 		        educationData.setName(educationRes.getString("name"));
 		        educationList.add(educationData);
-		    }
-		    
+		    }		    
 		    return educationList;
 		}
 	 
